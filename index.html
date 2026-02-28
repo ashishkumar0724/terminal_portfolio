@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ashish Kumar - Portfolio</title>
+  <link data-trunk rel="rust" href="Cargo.toml" data-wasm-opt="z" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Inter:wght@300;400;600;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #ffc600;
+      --secondary: #0ff;
+      --accent: #0f0;
+      --dark: #0c0c0c;
+      --darker: #050505;
+      --light: #fff;
+      --gray: #888;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    #landing-page {
+      position: relative;
+      background: var(--darker);
+    }
+
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 198, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 198, 0, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .hero-content {
+      text-align: center;
+      transform-style: preserve-3d;
+      animation: heroFloat 6s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .greeting {
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.5s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .greeting::before {
+      content: '>';
+      color: var(--accent);
+    }
+
+    .greeting::after {
+      content: '|';
+      animation: blink 1s infinite;
+    }
+
+    .name {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 800;
+      margin: 1rem 0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.8s;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .tagline {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.25rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 2rem auto;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 1.1s;
+    }
+
+    .role {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      margin: 1rem 0;
+      font-weight: 600;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 1.4s;
+    }
+
+    .location {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 1.7s;
+    }
+
+    .cta-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 2s;
+    }
+
+    .cta-button {
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Fira Code', monospace;
+      color: var(--dark);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 198, 0, 0.4);
+    }
+
+    .cta-button.secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .cta-button.secondary:hover {
+      background: var(--primary);
+      color: var(--dark);
+    }
+
+    .story-section {
+      min-height: 100vh;
+      padding: 6rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .section-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: '════';
+      color: var(--secondary);
+      margin: 0 1rem;
+    }
+
+    .about-content {
+      max-width: 800px;
+      text-align: center;
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: var(--gray);
+    }
+
+    .about-content .highlight {
+      color: var(--light);
+      font-weight: 600;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255,198,0,0.1) 0%, rgba(0,255,255,0.1) 100%);
+      border: 1px solid rgba(255,198,0,0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px) rotateX(10deg);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+    }
+
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .tech-category {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid #333;
+      transition: all 0.3s ease;
+    }
+
+    .tech-category:hover {
+      border-color: var(--primary);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255,198,0,0.2);
+    }
+
+    .tech-category h3 {
+      font-family: 'Fira Code', monospace;
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .tech-item {
+      background: linear-gradient(135deg, rgba(255,198,0,0.2) 0%, rgba(0,255,255,0.2) 100%);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--light);
+      border: 1px solid rgba(255,198,0,0.3);
+      transition: all 0.2s;
+    }
+
+    .tech-item:hover {
+      background: var(--primary);
+      color: var(--dark);
+      transform: scale(1.05);
+    }
+
+    .projects-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .project-card {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid #333;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 40px rgba(255,198,0,0.2);
+    }
+
+    .project-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .project-card p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .project-tech {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .project-tech span {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--secondary);
+      background: rgba(0,255,255,0.1);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+    }
+
+    .terminal-cta {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+    }
+
+    .terminal-preview {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+      margin: 2rem 0;
+      border: 1px solid #333;
+      font-family: 'Fira Code', monospace;
+      text-align: left;
+    }
+
+    .terminal-line {
+      margin: 0.5rem 0;
+      color: var(--gray);
+    }
+
+    .terminal-line.command {
+      color: var(--accent);
+    }
+
+    .terminal-line.output {
+      color: var(--secondary);
+      padding-left: 1rem;
+    }
+
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0) rotateX(0); }
+      50% { transform: translateY(-20px) rotateX(5deg); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .name {
+        font-size: 2.5rem;
+      }
+      .section-title {
+        font-size: 1.8rem;
+      }
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s;
+      mix-blend-mode: difference;
+      display: none;
+    }
+
+    @media (min-width: 769px) {
+      .cursor {
+        display: block;
+      }
+    }
+
+    /* ===== TERMINAL STYLES ===== */
+    #terminal-container {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.95);
+    }
+
+    .terminal-window {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      animation: slideIn 0.5s ease;
+    }
+
+    .terminal-header {
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+    }
+
+    .terminal-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .terminal-btn.close {
+      background: #ff5f56;
+    }
+
+    .terminal-btn.minimize {
+      background: #ffbd2e;
+    }
+
+    .terminal-btn.maximize {
+      background: #27c93f;
+    }
+
+    .terminal-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .terminal-title {
+      color: #888;
+      font-size: 0.9rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .terminal-body {
+      padding: 1rem;
+      min-height: 70vh;
+      max-height: 70vh;
+      overflow-y: auto;
+      background: #0c0c0c;
+    }
+
+    .terminal-body::-webkit-scrollbar {
+      width: 10px;
+    }
+    .terminal-body::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    .terminal-body::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 5px;
+    }
+    .terminal-body::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+
+    #output {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      color: #0f0;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    #output div {
+      margin: 4px 0;
+    }
+
+    #input-line {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #333;
+    }
+
+    .prompt {
+      color: #0f0;
+      margin-right: 0.5rem;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    #command-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #0f0;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      caret-color: #ffc600;
+    }
+
+    .back-button {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #ffc600 0%, #ff9500 100%);
+      color: #0c0c0c;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 5px 20px rgba(255, 198, 0, 0.4);
+      transition: all 0.3s;
+      z-index: 1000;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .back-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 198, 0, 0.6);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="grid-bg"></div>
+
+  <!-- ===== LANDING PAGE ===== -->
+  <div id="landing-page">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="greeting">Hello, World! I'm</div>
+        <h1 class="name">Ashish Kumar</h1>
+        <div class="role">Cybersecurity Enthusiast & AI/ML Student</div>
+        <p class="tagline">Third-year B.Tech student specializing in AI & ML, exploring cybersecurity fundamentals. Passionate about network security, threat detection, and ethical hacking.</p>
+        <div class="location">
+          <span>📍</span>
+          <span>Haryana, India</span>
+        </div>
+        <div class="cta-container">
+          <button class="cta-button" onclick="openTerminal()">Launch Terminal →</button>
+          <button class="cta-button secondary" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">Learn More ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="story-section">
+      <h2 class="section-title reveal">About Me</h2>
+      <div class="about-content reveal">
+        <p>
+          I'm a <span class="highlight">third-year B.Tech student</span> in Computer Science with specialization in 
+          <span class="highlight">Artificial Intelligence & Machine Learning</span> at GGSIPU, New Delhi. 
+          Currently exploring <span class="highlight">cybersecurity fundamentals</span> with hands-on experience 
+          in Linux, Python scripting, and security tools.
+        </p>
+        <p style="margin-top: 1.5rem;">
+          My focus is on <span class="highlight">network security</span>, <span class="highlight">intrusion detection</span>, 
+          and <span class="highlight">threat analysis</span>. I've completed introductory courses in cybersecurity 
+          and networking, and actively participate in CTF challenges and TryHackMe labs.
+        </p>
+        
+        <div class="stats">
+          <div class="stat-card">
+            <span class="stat-number">8.7</span>
+            <div class="stat-label">CGPA</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">4+</span>
+            <div class="stat-label">Security Projects</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">5+</span>
+            <div class="stat-label">Certifications</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">3rd</span>
+            <div class="stat-label">Year Student</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="story-section">
+      <h2 class="section-title reveal">Technical Skills</h2>
+      <div class="tech-grid reveal">
+        <div class="tech-category">
+          <h3>🔒 Cybersecurity</h3>
+          <div class="tech-list">
+            <span class="tech-item">Network Security</span>
+            <span class="tech-item">Ethical Hacking</span>
+            <span class="tech-item">OWASP Top 10</span>
+            <span class="tech-item">Wireshark</span>
+            <span class="tech-item">Nmap</span>
+            <span class="tech-item">Kali Linux</span>
+            <span class="tech-item">Burp Suite</span>
+          </div>
+        </div>
+        <div class="tech-category">
+          <h3>💻 Programming</h3>
+          <div class="tech-list">
+            <span class="tech-item">Python</span>
+            <span class="tech-item">Bash Scripting</span>
+            <span class="tech-item">SQL</span>
+            <span class="tech-item">Scapy</span>
+          </div>
+        </div>
+        <div class="tech-category">
+          <h3>🤖 Machine Learning</h3>
+          <div class="tech-list">
+            <span class="tech-item">Scikit-learn</span>
+            <span class="tech-item">Pandas</span>
+            <span class="tech-item">NumPy</span>
+            <span class="tech-item">Random Forest</span>
+            <span class="tech-item">SVM</span>
+          </div>
+        </div>
+        <div class="tech-category">
+          <h3>🌐 Networking</h3>
+          <div class="tech-list">
+            <span class="tech-item">TCP/IP</span>
+            <span class="tech-item">HTTP/HTTPS</span>
+            <span class="tech-item">DNS</span>
+            <span class="tech-item">Firewalls</span>
+            <span class="tech-item">Linux/Ubuntu</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Preview -->
+    <section class="story-section">
+      <h2 class="section-title reveal">Security Projects</h2>
+      <div class="projects-preview reveal">
+        <div class="project-card">
+          <h3>🛡️ Network Intrusion Detection</h3>
+          <p>Built IDS using ML algorithms (Random Forest, SVM) with NSL-KDD dataset to identify network threats and attack patterns like DoS and probing attacks.</p>
+          <div class="project-tech">
+            <span>Python</span>
+            <span>ML</span>
+            <span>Security</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>🔐 Ransomware Simulation</h3>
+          <p>Educational project to understand ransomware mechanics, file encryption concepts, and prevention methods in isolated environments.</p>
+          <div class="project-tech">
+            <span>Python</span>
+            <span>Encryption</span>
+            <span>Research</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>📡 Network Traffic Analyzer</h3>
+          <p>Developed packet analyzer using Python and Scapy to capture and analyze network traffic, identify protocols and communication patterns.</p>
+          <div class="project-tech">
+            <span>Python</span>
+            <span>Scapy</span>
+            <span>Wireshark</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>🔑 Password Security Analysis</h3>
+          <p>Experimented with John the Ripper to understand password cracking techniques, hashing, salting, and authentication vulnerabilities.</p>
+          <div class="project-tech">
+            <span>Security</span>
+            <span>John</span>
+            <span>Analysis</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal CTA -->
+    <section class="terminal-cta">
+      <h2 class="section-title reveal">Explore My Portfolio</h2>
+      <p class="reveal" style="color: var(--gray); font-size: 1.2rem; max-width: 600px; text-align: center;">
+        Launch the interactive terminal to view my projects, skills, and contact information
+      </p>
+      <div class="terminal-preview reveal">
+        <div class="terminal-line">ashish@portfolio:~$ <span class="command">whoami</span></div>
+        <div class="terminal-line output">Ashish Kumar - Cybersecurity Enthusiast & AI/ML Student</div>
+        <div class="terminal-line">ashish@portfolio:~$ <span class="command">skills</span></div>
+        <div class="terminal-line output">Python, Network Security, ML, Wireshark, Kali Linux...</div>
+        <div class="terminal-line">ashish@portfolio:~$ <span style="animation: blink 1s infinite;">|</span></div>
+      </div>
+      <button class="cta-button reveal" onclick="openTerminal()" style="margin-top: 2rem;">
+        Open Terminal Now →
+      </button>
+    </section>
+  </div>
+
+  <!-- ===== TERMINAL CONTAINER ===== -->
+  <div id="terminal-container">
+    <div class="terminal-window">
+      <!-- Terminal Header -->
+      <div class="terminal-header">
+        <div class="terminal-buttons">
+          <button class="terminal-btn close" onclick="closeTerminal()" title="Close"></button>
+          <button class="terminal-btn minimize" onclick="minimizeTerminal()" title="Minimize"></button>
+          <button class="terminal-btn maximize" onclick="maximizeTerminal()" title="Maximize"></button>
+        </div>
+        <div class="terminal-title">ashish@portfolio: ~</div>
+        <div style="width: 60px;"></div>
+      </div>
+      
+      <!-- Terminal Body -->
+      <div class="terminal-body">
+        <div id="output"></div>
+        
+        <!-- Input Line -->
+        <div id="input-line">
+          <span class="prompt">ashish@portfolio:~$</span>
+          <input 
+            type="text" 
+            id="command-input" 
+            autofocus 
+            autocomplete="off" 
+            spellcheck="false"
+            aria-label="Terminal command input"
+          />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Back Button -->
+    <button class="back-button" onclick="backToLanding()">← Back to Portfolio</button>
+  </div>
+
+  <script>
+    // ===== CURSOR EFFECT =====
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // ===== SCROLL REVEAL =====
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+      reveals.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('active');
+        }
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // ===== TERMINAL FUNCTIONS =====
+    function openTerminal() {
+      document.getElementById('landing-page').style.display = 'none';
+      document.getElementById('terminal-container').style.display = 'block';
+      
+      const input = document.getElementById('command-input');
+      if (input) {
+        input.focus();
+      }
+      
+      // Initialize terminal (calls Rust function)
+      if (typeof window.init_terminal === 'function') {
+        window.init_terminal();
+      }
+    }
+
+    function closeTerminal() {
+      if (confirm('Close terminal? Your session will be lost.')) {
+        backToLanding();
+      }
+    }
+
+    function minimizeTerminal() {
+      const body = document.querySelector('.terminal-body');
+      if (body) {
+        body.style.display = body.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    function maximizeTerminal() {
+      const window_elem = document.querySelector('.terminal-window');
+      if (window_elem) {
+        window_elem.requestFullscreen().catch(err => {
+          console.log('Fullscreen error:', err);
+        });
+      }
+    }
+
+    function backToLanding() {
+      document.getElementById('terminal-container').style.display = 'none';
+      document.getElementById('landing-page').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    // Keep focus on input when clicking in terminal
+    document.addEventListener('click', function(e) {
+      if (document.getElementById('terminal-container').style.display === 'block') {
+        if (!e.target.closest('.back-button') && !e.target.closest('.terminal-btn')) {
+          const input = document.getElementById('command-input');
+          if (input) input.focus();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
