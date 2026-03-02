@@ -1,1 +1,22 @@
 
+<p align="center">
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <defs>
+      <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#7c3aed"/>
+        <stop offset="100%" style="stop-color:#22d3ee"/>
+      </linearGradient>
+    </defs>
+    <rect x="2" y="4" width="20" height="16" rx="2" fill="#161b22" stroke="url(#gradient)"/>
+    <circle cx="5" cy="7" r="1" fill="#ff5f56"/>
+    <circle cx="8" cy="7" r="1" fill="#ffbd2e"/>
+    <circle cx="11" cy="7" r="1" fill="#27c93f"/>
+    <path d="M6 12l2 2-2 2" stroke="#58a6ff" stroke-width="1.5"/>
+    <path d="M10 16h6" stroke="#3fb950" stroke-width="1.5"/>
+    <rect x="16" y="15.5" width="1" height="2" fill="#e6edf3" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1s" repeatCount="indefinite"/>
+    </rect>
+  </svg>
+  <br/><br/>
+  <strong style="font-size:1.5rem">Terminal Portfolio</strong>
+</p>
