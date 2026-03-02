@@ -1,13 +1,22 @@
-# 💻 Interactive Terminal Portfolio
 
-A sophisticated, web-based Interactive Bash Terminal Portfolio that functions as a realistic terminal emulator while serving as an interactive resume. Built with Next.js 16, TypeScript, and Tailwind CSS.
+# <p align="center">💻 Terminal Portfolio</p>
 
-![Terminal Portfolio](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-16-000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Bun-1.0-F9F1E1?style=for-the-badge&logo=bun&logoColor=black" alt="Bun" />
 
----
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  
+  <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
+  <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
+</p>
+
+<p align="center">
+  <strong>🚀 Interactive terminal-style portfolio built for performance, accessibility, and developer experience</strong>
+</p>
 
 ## ✨ Features
 
