@@ -88,6 +88,16 @@ docker compose logs -f
 
 # Stop container
 docker compose down
+
+# Troubleshoot 
+# Clean old builds
+docker compose down -v --rmi local
+
+# Rebuild
+docker compose --profile dev build --no-cache
+
+# Run
+docker compose --profile dev up -d
 ```
 
 Open **http://localhost:3000** in your browser.
