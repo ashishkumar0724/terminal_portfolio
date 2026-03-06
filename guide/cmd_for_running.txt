@@ -1,0 +1,8 @@
+# Clean old builds
+docker compose down -v --rmi local
+
+# Rebuild
+docker compose --profile dev build --no-cache
+
+# Run
+docker compose --profile dev up -d

@@ -1,0 +1,32 @@
+# ============================================
+# Development Dockerfile for Terminal Portfolio
+# With hot-reload support
+# ============================================
+
+FROM oven/bun:1.3.4-alpine AS development
+WORKDIR /app
+
+# Install necessary tools
+RUN apk add --no-cache libc6-compat
+
+# Set environment variables
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV WATCHPACK_POLLING=true
+
+# Copy package files first (for better caching)
+COPY package.json bun.lock* ./
+
+# Install all dependencies (including devDependencies)
+RUN bun install
+
+# Copy source files
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start development server with hot-reload
+CMD ["bun", "run", "dev"]

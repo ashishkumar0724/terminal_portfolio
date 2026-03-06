@@ -1,0 +1,60 @@
+# ============================================
+# Docker Compose Override for Development
+# Use: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Or simply: docker compose --profile dev up
+# ============================================
+
+services:
+  terminal-portfolio-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: terminal-portfolio-dev
+    profiles:
+      - dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      # Mount source code for hot-reload
+      - ./src:/app/src:delegated
+      - ./public:/app/public:delegated
+      - ./package.json:/app/package.json:ro
+      - ./bun.lock:/app/bun.lock:ro
+      # Prevent overwriting node_modules
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - portfolio-network
+    stdin_open: true
+    tty: true
+
+  # Optional: Add a database service if needed in the future
+  # db:
+  #   image: postgres:16-alpine
+  #   container_name: terminal-portfolio-db
+  #   profiles:
+  #     - dev
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: portfolio
+  #     POSTGRES_PASSWORD: portfolio123
+  #     POSTGRES_DB: portfolio
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - portfolio-network
+
+# volumes:
+#   postgres-data:
+
+networks:
+  portfolio-network:
+    driver: bridge

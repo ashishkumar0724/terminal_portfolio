@@ -1,0 +1,84 @@
+# ============================================
+# Docker Compose for Terminal Portfolio
+# Unified configuration with profiles
+# ============================================
+# 
+# USAGE:
+# ------
+# 
+# Production mode:
+#   docker compose up
+# 
+# Development mode:
+#   docker compose --profile dev up
+# 
+# Build only:
+#   docker compose build
+# 
+# Stop all:
+#   docker compose down
+# 
+# View logs:
+#   docker compose logs -f
+# 
+# ============================================
+
+services:
+  # ==========================================
+  # PRODUCTION SERVICE
+  # ==========================================
+  terminal-portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: terminal-portfolio
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - portfolio-network
+
+  # ==========================================
+  # DEVELOPMENT SERVICE
+  # ==========================================
+  terminal-portfolio-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: terminal-portfolio-dev
+    profiles:
+      - dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      # Mount source code for hot-reload
+      - ./src:/app/src:delegated
+      - ./public:/app/public:delegated
+      - ./package.json:/app/package.json:ro
+      - ./bun.lock:/app/bun.lock:ro
+      # Prevent overwriting node_modules
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - portfolio-network
+    stdin_open: true
+    tty: true
+
+networks:
+  portfolio-network:
+    driver: bridge
