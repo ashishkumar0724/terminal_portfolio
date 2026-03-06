@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'portfollio_rust/**'
+      - 'portfolio_rust/**'
 
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
         run: cargo install trunk
       
       - name: Build Portfolio
-        working-directory: ./portfollio_rust
+        working-directory: ./portfolio_rust
         run: trunk build --release
       
       - name: Setup Pages
