@@ -1,4 +1,12 @@
 [build]
 target = "index.html"
 dist = "dist"
-public_url = "/"
+public_url = "/terminal_portfolio/portfolio_rust/"
+
+[watch]
+watch = ["src", "static"]
+
+[serve]
+address = "0.0.0.0"
+port = 8080
+open = false
