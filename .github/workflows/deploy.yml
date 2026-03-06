@@ -2,9 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'portfolio_rust/**'
+    branches: ["main"]
 
 permissions:
   contents: read
