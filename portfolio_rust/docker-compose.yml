@@ -1,0 +1,15 @@
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount your current code to the container so changes reflect instantly
+      - .:/app
+      # Keep the cargo registry outside so it doesn't rebuild every time
+      - cargo-registry:/usr/local/cargo/registry
+    command: trunk serve --address 0.0.0.0 --port 8080
+
+volumes:
+  cargo-registry:
