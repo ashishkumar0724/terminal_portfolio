@@ -1,7 +1,7 @@
 [build]
 target = "index.html"
 dist = "dist"
-public_url = "/terminal_portfolio/portfolio_rust/"
+public_url = "/terminal_portfolio/"
 
 [watch]
 watch = ["src", "static"]
